@@ -1,6 +1,9 @@
 **Day 1 of 100 days of DevOps**
+
 Linux User Setup with Non-Interactive Shell:
-To accommodate the backup agent tool's specifications, the system admin team at xFusionCorp Industries requires the creation of a user with a non-interactive shell. Here's your task: Create a user named siva with a non-interactive shell on App Server 2.
+To accommodate the backup agent tool's specifications, the system admin team at xFusionCorp Industries requires the creation of a user with a non-interactive shell. 
+Here's your task: Create a user named siva with a non-interactive shell on App Server 2.
+
 For a **non-interactive shell** user in Linux (meaning they can’t log in interactively), one can use /usr/sbin/nologin or /bin/false as their shell.
 
 # Step 1: SSH into App Server2
