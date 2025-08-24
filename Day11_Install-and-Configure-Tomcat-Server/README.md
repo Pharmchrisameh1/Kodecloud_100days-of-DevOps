@@ -7,19 +7,19 @@ On Application Server 3 create a container named nginx_3 using image nginx with 
 
 **Steps**
 
-**SSH into App Server 3
+**SSH into App Server 3**
 
 ```bash
 ssh banner@stapp03
 ```
 
-**Pulled the required image 
+**Pulled the required image** 
 
 ```bash
 sudo docker pull nginx:alpine
 ```
 
-**Run the container:
+**Run the container**:
 
 ```bash
 sudo docker run -d --name nginx_3 nginx:alpine
@@ -31,7 +31,7 @@ sudo docker run -d --name nginx_3 nginx:alpine
 
 nginx:alpine → lightweight nginx image
 
-**Verified it’s running:
+**Verified it’s running**:
 
 ```bash
 sudo docker ps
