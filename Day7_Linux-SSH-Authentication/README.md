@@ -1,23 +1,45 @@
-**TASK**:
+**TASK**
 
-In a bid to automate backup processes, the xFusionCorp Industries sysadmin team has developed a new bash script named xfusioncorp.sh. While the script has been distributed to all necessary servers, it lacks executable permissions on App Server 2 within the Stratos Datacenter.
+The system admins team of xFusionCorp Industries has set up some scripts on jump host that run on regular intervals and perform operations on all app servers in Stratos Datacenter. To make these scripts work properly we need to make sure the thor user on jump host has password-less SSH access to all app servers through their respective sudo users (i.e tony for app server 1).
 
- Your task is to grant executable permissions to the /tmp/xfusioncorp.sh script on App Server 2.
+Based on the requirements, perform the following:
 
- Additionally, ensure that all users have the capability to execute it.
+Set up a password-less authentication from user thor on jump host to all app servers through their respective sudo users.
 
-**Steps**:
+**Steps**
 
-**SSH into App Server 2**
+Generated an SSH key pair
+
 ```bash
-ssh steve@stapp02
+ssh-keygen -t rsa -b 2048
 ```
 
-**Granted execute permissions to all users
+Pressed Enter for all prompts (use default file path ~/.ssh/id_rsa and no passphrase).
+
+Copied the public key to each App Server’s sudo user
+
+Used ssh-copy-id to push thor’s public key to the sudo user on each app server.
+
 ```bash
-chmod 777 /tmp/xfusioncorp.sh
+ssh-copy-id tony@stapp01
 ```
-**Verified that the permission was succefully granted**
-``bash
-ls -l /tmp/xfusioncorp.sh
+```bash
+ssh-copy-id steve@stapp02
 ```
+```bash
+ssh-copy-id banner@stapp03
+```
+Entered the password for each sudo user when prompted
+
+Tested the password-less access
+
+From jump host as thor:
+
+```bash
+ssh-copy-id tony@stapp01
+```
+```bash
+ssh-copy-id steve@stapp02
+```
+```bash
+ssh-copy-id banner@stapp03

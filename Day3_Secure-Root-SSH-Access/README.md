@@ -1,37 +1,35 @@
-**TASK**:
+**TASK**
 
-A container named kke-container was created by one of the Nautilus project developers on App Server 3. It was solely for testing purposes and now requires deletion. Execute the following task: Delete the kke-container on App Server 3 in Stratos DC.
 
-**Steps**
+Following security audits, the xFusionCorp Industries security team has rolled out new protocols, including the restriction of direct root SSH login.
 
-**SSH into App Server 3**
+Your task is to disable direct SSH root login on all app servers within the Stratos Datacenter.
 
-```bash
-ssh banner@stapp03
-```
-
-**Check running containers**
+**Steps to disable direct SSH root login**
 
 ```bash
-docker ps -a
+ssh tony@stapp01
 ```
 
-**Look for a container named kke-container**
-
-Stop the container (if running)
+Edited the SSH configuration file:
 
 ```bash
-docker stop kke-container
+sudo vi /etc/ssh/sshd_config
 ```
+Found and updated the line by changing the permission from yes to no:
 
-**Remove the container**
+- PermitRootLogin yes
++ PermitRootLogin no
+
+Saved the file and restarted the SSH service:
 
 ```bash
-docker rm kke-container
+sudo systemctl restart sshd
 ```
 
-**Verify it’s gone**
+Verified that root login is disabled:
 
 ```bash
-docker ps -a
+sudo grep PermitRootLogin /etc/ssh/sshd_config
 ```
+The same procedures were repeated for server2 and server3

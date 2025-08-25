@@ -1,49 +1,39 @@
 **TASK**
 
-Following a security audit, the xFusionCorp Industries security team has opted to enhance application and server security with SELinux. To initiate testing, the following requirements have been established for App server 1 in the Stratos Datacenter:
+During the weekly meeting, the Nautilus DevOps team discussed about the automation and configuration management solutions that they want to implement. While considering several options, the team has decided to go with Ansible for now due to its simple setup and minimal pre-requisites. The team wanted to start testing using Ansible, so they have decided to use jump host as an Ansible controller to test different kind of tasks on rest of the servers. 
 
-
-
-Install the required SELinux packages.
-
-Permanently disable SELinux for the time being; it will be re-enabled after necessary configuration changes.
-
-No need to reboot the server, as a scheduled maintenance reboot is already planned for tonight.
-
-Disregard the current status of SELinux via the command line; the final status after the reboot should be disabled.
+Install ansible version 4.7.0 on Jump host using pip3 only. Make sure Ansible binary is available globally on this system, i.e all users on this system are able to run Ansible commands.
 
 **Steps**
 
-```bash
-ssh tony@stapp01
-```
-**Installed SELinux packages**
-
-Since most CentOS/RHEL-based systems use yum or dnf. This was installed:
+Make sure pip3 is installed
 
 ```bash
-sudo yum install -y selinux-policy selinux-policy-targeted policycoreutils
+sudo apt-get update && sudo apt-get install -y python3-pip
 ```
 
-If yum is replaced by dnf on the system:
+Installed Ansible 4.7.0 via pip3
+
+Used --prefix=/usr/local so it’s available globally to all users.
 
 ```bash
-sudo dnf install -y selinux-policy selinux-policy-targeted policycoreutils
+sudo pip3 install ansible==4.7.0
 ```
-**Permanently disabled SELinux**
+Or       
 
-Edited the SELinux configuration file:
+If the system complains about permissions or location, explicitly set install path:
 
 ```bash
-sudo vi /etc/selinux/config
+sudo pip3 install ansible==4.7.0 --upgrade --prefix=/usr/local
 ```
+Ensure Ansible is in PATH for all users
 
-Found this line "SELINUX=enforcing" and changed the "enforcing" to "disabled"
+```bash
+echo 'export PATH=$PATH:/usr/local/bin' | sudo tee /etc/profile.d/ansible.sh
+sudo chmod 755 /etc/profile.d/ansible.sh
+```
+Then reloaded the profile
 
-SELINUX=enforcing
-
-
-Changed to:
-
-SELINUX=disabled
-
+```bash
+source /etc/profile
+```

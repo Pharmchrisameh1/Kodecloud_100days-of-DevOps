@@ -1,40 +1,58 @@
-**TASK**:
+**TASK**
 
-The Nautilus DevOps team possesses confidential data on App Server 1 in the Stratos Datacenter. A container named ubuntu_latest is running on the same server.
+The Nautilus system admins team has prepared scripts to automate several day-to-day tasks. They want them to be deployed on all app servers in Stratos DC on a set schedule
+.
+Before that they need to test similar functionality with a sample cron job. Therefore, perform the steps below: 
 
+a. Install cronie package on all Nautilus app servers and start crond service. 
 
-Copy an encrypted file /tmp/nautilus.txt.gpg from the docker host to the ubuntu_latest container located at /usr/src/. 
+b. Add a cron */5 * * * * echo hello > /tmp/cron_text for root user.
 
-Ensure the file is not modified during this operation.
+**Steps**
 
-**Steps**:
-
-**SSH into App Server 1**
+SSH into each App Server into each app server 
 
 ```bash
 ssh tony@stapp01
 ```
-**Confirmed the running container**
+Installed cronie
 
 ```bash
-docker ps
+sudo yum install -y cronie
 ```
 
-**Copied the file into the container**
+Enabled & start the cron service
 
 ```bash
-docker cp /tmp/nautilus.txt.gpg ubuntu_latest:/usr/src/
-```
-**Verified inside the container**
-
-Access the container shell:
-
-```bash
-docker exec -it ubuntu_latest bash
+sudo systemctl enable crond
+sudo systemctl start crond
 ```
 
-**Then checked if the file is in place**:
+Checked:
 
 ```bash
-ls -l /usr/src/nautilus.txt.gpg
+systemctl status crond
+```
+
+
+Added the cron job for root
+
+Edited root’s crontab:
+
+```bash
+sudo crontab -e
+```
+
+Added
+
+```bash
+*/5 * * * * echo hello > /tmp/cron_text
+```
+
+Saved and exited
+
+Verified
+
+```bash
+sudo crontab -l
 ```

@@ -1,39 +1,101 @@
 **TASK**
 
-The Nautilus team wants to create a debug container on Application Server 3. However, they had some specific requirements related to the CMD. Please complete the task as per details given below:
+The production support team of xFusionCorp Industries is working on developing some bash scripts to automate different day to day tasks. One is to create a bash script for taking websites backup. They have a static website running on App Server 2 in Stratos Datacenter, and they need to create a bash script named blog_backup.sh which should accomplish the following tasks. (Also remember to place the script under /scripts directory on App Server 2). 
 
+a. Create a zip archive named xfusioncorp_blog.zip of /var/www/html/blog directory. 
 
-a. On Application Server 3 create a container named debug_3 using image ubuntu/apache2:latest. 
+b. Save the archive in /backup/ on App Server 2. This is a temporary storage, as backups from this location will be clean on weekly basis. Therefore, we also need to save this backup archive on Nautilus Backup Server. 
 
+c. Copy the created archive to Nautilus Backup Server server in /backup/ location. 
 
-b. Overwrite the default CMD with command sleep 1000. 
-
-
-c. Make sure the container is in running state.
+d. Please make sure script won't ask for password while copying the archive file. 
+Additionally, the respective server user (for example, tony in case of App Server 1) must be able to run it.
 
 **Steps**
-
-**SSH into App Server 3**
+```
+Login to App Server 2
 
 ```bash
-ssh banner@stapp03
+ssh steve@stapp02
 ```
-
-**Run the container with the overwritten CMD**:
+Ensured zip package is installed
 
 ```bash
-sudo docker run -d --name debug_3 ubuntu/apache2:latest sleep 1000
+yum install -y zip
 ```
-
--d → detached mode (runs in background)
-
---name debug_3 → sets the container name
-
-sleep 1000 → replaces the image’s default CMD
-
-
-**Verified the container by running**:
+Created the script file
 
 ```bash
-sudo docker ps
+vi /scripts/media_backup.sh
 ```
+
+Added the following content
+
+#!/bin/bash
+
+# Created /backup if it does not exist
+mkdir -p /backup
+
+# Created zip archive of the media website
+zip -r /backup/xfusioncorp_media.zip /var/www/html/media
+
+# Copied the archive to Nautilus Backup Server (stbkp01)
+scp /backup/xfusioncorp_media.zip clint@stbkp01:/backup/
+
+# Check status
+if [ $? -eq 0 ]; then
+    echo "Backup successful! File copied to stbkp01:/backup/xfusioncorp_media.zip"
+else
+    echo "Backup failed!"
+fi
+
+
+
+Gave execute permissions
+
+```bash
+chmod +x /scripts/media_backup.sh
+```
+
+Set up passwordless SSH to backup server
+
+```bash
+ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -N ""
+ssh-copy-id clint@stbkp01
+```
+
+Tested:
+
+```bash
+ssh clint@stbkp01
+```
+exit
+
+Run the script
+
+```bash
+/scripts/media_backup.sh
+```
+
+Ouptput:
+
+Backup successful! File copied to stbkp01:/backup/xfusioncorp_media.zip
+
+
+With this setup:
+
+media_backup.sh exists under /scripts on App Server 2.
+
+
+It zips /var/www/html/media → /backup/xfusioncorp_media.zip.
+
+
+It copies the archive to /backup/ on Nautilus Backup Server (stbkp01).
+
+
+SSH keys ensure no password prompt.
+
+
+steve (App Server 2 user) can run the script directly.
+
+
