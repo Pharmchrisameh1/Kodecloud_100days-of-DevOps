@@ -53,3 +53,5 @@ sudo service iptables save
 ```bash
 sudo systemctl restart iptables
 ```
+
+The same procedures above were repeated for server2 and server3 respectively
