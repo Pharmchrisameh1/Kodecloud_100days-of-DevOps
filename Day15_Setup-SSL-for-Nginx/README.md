@@ -45,6 +45,7 @@ sudo vi /etc/nginx/conf.d/ssl.conf
 
 Added this to /etc/nginx/conf.d/ssl.conf:
 
+```bash
 server {
     listen 443 ssl;
     server_name _;
@@ -55,7 +56,7 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 }
-
+```
 
 Created index.html
 
