@@ -1,48 +1,79 @@
 **TASK**
 
-The Nautilus application development team has shared that they are planning to deploy one newly developed application on Nautilus infra in Stratos DC. The application uses PostgreSQL database, so as a pre-requisite we need to set up PostgreSQL database server as per requirements shared below:
+xFusionCorp Industries is planning to host a WordPress website on their infra in Stratos Datacenter. They have already done infrastructure configuration—for example, on the storage server they already have a shared directory /vaw/www/html that is mounted on each app host under /var/www/html directory. Please perform the following steps to accomplish the task:
 
-PostgreSQL database server is already installed on the Nautilus database server.
+a. Install httpd, php and its dependencies on all app hosts.
 
-a. Create a database user kodekloud_roy and set its password to 8FmzjvFU6S.
+b. Apache should serve on port 6000 within the apps.
 
-b. Create a database kodekloud_db3 and grant full permissions to user kodekloud_roy on this database.
+c. Install/Configure MariaDB server on DB Server.
 
-Note: Please do not try to restart PostgreSQL server service.
+d. Create a database named kodekloud_db1 and create a database user named kodekloud_rin identified as password 8FmzjvFU6S. Further make sure this newly created user is able to perform all operation on the database you created.
+
+e. Finally you should be able to access the website on LBR link, by clicking on the App button on the top bar. You should see a message like App is able to connect to the database using user kodekloud_rin
 
 **Steps**
 
-Logged into the database
+ssh tony@stapp01
+
+Instaledl Apache, PHP and dependencies
+
+```bash
+sudo yum install httpd php php-mysqlnd -y
+sudo systemctl enable httpd
+sudo systemctl start httpd
+```
+
+Configured Apache to serve on port 6000 by changing listen from 80 to 6000
+
+```bash
+sudo vi /etc/httpd/conf/httpd.conf
+```
+Added virtual host config
+
+```bash
+sudo vi /etc/httpd/conf.d/wordpress.conf
+```
+<VirtualHost *:6000>
+    DocumentRoot /var/www/html
+    ServerName localhost
+
+    <Directory /var/www/html>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+
+Restarted the apache
+
+```bash
+sudo systemctl start httpd
+sudo systemctl enable httpd
+sudo systemctl restart httpd
+```
+
+The above procedures were repeated for server2 and server3
+
+Then logged into the database
 
 ssh peter@stdb01
 
-Switched to the postgres system user
+Installed and Configured MariaDB on DB Server
 
 ```bash
-sudo -i -u postgres
+sudo yum install -y mariadb-server
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
 ```
 
-Created the database user
+Created database and user
 
 ```bash
-psql -c "CREATE USER kodekloud_roy WITH PASSWORD '8FmzjvFU6S';"
+sudo mysql -u root
 ```
 
-Created the database and assigned ownership
-
-```bash
-psql -c "CREATE DATABASE kodekloud_db3 OWNER kodekloud_roy;"
-```
-
-Explicitly granted privileges
-
-```bash
-psql -c "GRANT ALL PRIVILEGES ON DATABASE kodekloud_db3 TO kodekloud_roy;"
-```
-
-Verified the connection
-
-```bash
-psql -U kodekloud_roy -d kodekloud_db3 -h localhost
-```
-
+CREATE DATABASE kodekloud_db1;
+CREATE USER 'kodekloud_rin'@'%' IDENTIFIED BY '8FmzjvFU6S';
+GRANT ALL PRIVILEGES ON kodekloud_db1.* TO 'kodekloud_rin'@'%';
+FLUSH PRIVILEGES;
+EXIT;
