@@ -35,7 +35,6 @@ sudo chmod 600 /etc/nginx/ssl/nautilus.key
 
 ```bash
 sudo vi /etc/nginx/conf.d/ssl.conf
-```
 
 server {
     listen 443 ssl;
@@ -47,7 +46,7 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 }
-
+```
 
 **Created index.html**
 
