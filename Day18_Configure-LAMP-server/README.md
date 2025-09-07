@@ -73,7 +73,11 @@ sudo mysql -u root
 ```
 
 CREATE DATABASE kodekloud_db1;
+
 CREATE USER 'kodekloud_rin'@'%' IDENTIFIED BY '8FmzjvFU6S';
+
 GRANT ALL PRIVILEGES ON kodekloud_db1.* TO 'kodekloud_rin'@'%';
+
 FLUSH PRIVILEGES;
+
 EXIT;
