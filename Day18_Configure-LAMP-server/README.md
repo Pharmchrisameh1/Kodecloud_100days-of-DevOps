@@ -12,6 +12,8 @@ Note: Please do not try to restart PostgreSQL server service.
 
 **Steps**
 
+Logged into the database
+
 ssh peter@stdb01
 
 Switched to the postgres system user
