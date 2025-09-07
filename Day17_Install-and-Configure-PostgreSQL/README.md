@@ -1,68 +1,48 @@
 **TASK**
 
-The system admins team of xFusionCorp Industries needs to deploy a new application on App Server 2 in Stratos Datacenter. They have some pre-requites to get ready that server for application deployment. Prepare the server as per requirements shared below: 
+The Nautilus application development team has shared that they are planning to deploy one newly developed application on Nautilus infra in Stratos DC. The application uses PostgreSQL database, so as a pre-requisite we need to set up PostgreSQL database server as per requirements shared below:
 
-1. Install and configure nginx on App Server 2. 
+PostgreSQL database server is already installed on the Nautilus database server.
 
-2. On App Server 2 there is a self signed SSL certificate and key present at location /tmp/nautilus.crt and /tmp/nautilus.key. Move them to some appropriate location and deploy the same in Nginx. 
+a. Create a database user kodekloud_roy and set its password to 8FmzjvFU6S.
 
-3. Create an index.html file with content Welcome! under Nginx document root. 
+b. Create a database kodekloud_db3 and grant full permissions to user kodekloud_roy on this database.
 
-4. For final testing try to access the App Server 2 link (either hostname or IP) from jump host using curl command. For example curl -Ik https://<app-server-ip>/.
+Note: Please do not try to restart PostgreSQL server service.
 
 **Steps**
 
-ssh steve@stapp02
+Logged into the database
 
-**Installed and enabled Nginx**
+ssh peter@stdb01
 
-```bash
-sudo yum install -y nginx
-sudo systemctl start nginx
-sudo systemctl enable nginx
-```
-
-**Moved SSL certs to the proper location**
+Switched to the postgres system user
 
 ```bash
-sudo mkdir -p /etc/nginx/ssl
-sudo mv /tmp/nautilus.crt /etc/nginx/ssl/
-sudo mv /tmp/nautilus.key /etc/nginx/ssl/
-sudo chmod 600 /etc/nginx/ssl/nautilus.key
+sudo -i -u postgres
 ```
 
-**Configured SSL in Nginx**
+Created the database user
 
 ```bash
-sudo vi /etc/nginx/conf.d/ssl.conf
-
-server {
-    listen 443 ssl;
-    server_name stapp02;
-
-    ssl_certificate /etc/nginx/ssl/nautilus.crt;
-    ssl_certificate_key /etc/nginx/ssl/nautilus.key;
-
-    root /usr/share/nginx/html;
-    index index.html;
-}
+psql -c "CREATE USER kodekloud_roy WITH PASSWORD '8FmzjvFU6S';"
 ```
 
-**Created index.html**
+Created the database and assigned ownership
 
 ```bash
-echo "Welcome!" | sudo tee /usr/share/nginx/html/index.html
+psql -c "CREATE DATABASE kodekloud_db3 OWNER kodekloud_roy;"
 ```
 
-**Tested Nginx config**
+Explicitly granted privileges
 
 ```bash
-sudo nginx -t
-sudo systemctl reload nginx
+psql -c "GRANT ALL PRIVILEGES ON DATABASE kodekloud_db3 TO kodekloud_roy;"
 ```
 
-**Verified from the Jump host**
+Verified the connection
 
 ```bash
-curl -Ik https://stapp02
+psql -U kodekloud_roy -d kodekloud_db3 -h localhost
 ```
+
