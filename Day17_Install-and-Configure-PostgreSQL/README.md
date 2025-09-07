@@ -36,6 +36,7 @@ sudo chmod 600 /etc/nginx/ssl/nautilus.key
 ```bash
 sudo vi /etc/nginx/conf.d/ssl.conf
 ```
+
 server {
     listen 443 ssl;
     server_name stapp02;
