@@ -1,0 +1,12 @@
+#!/bin/sh
+
+DATE=$(date +%Y-%m-%d)
+TAG_NAME="release-$DATE"
+
+# Check if the tag already exists to avoid errors
+if ! git tag -l | grep -q "$TAG_NAME"; then
+  git tag "$TAG_NAME"
+  echo "Created tag: $TAG_NAME"
+else
+  echo "Tag $TAG_NAME already exists. Skipping..."
+fi
