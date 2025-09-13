@@ -82,7 +82,7 @@ git commit -m "Fix typo and update story index with all 4 titles"
 Pushed Changes to Remote
 
 ```bash
-git pushe origin master
+git push origin master
 ```
 Verified on Gitea UI
 
