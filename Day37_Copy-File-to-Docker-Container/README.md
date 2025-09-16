@@ -8,6 +8,14 @@ Copy an encrypted file /tmp/nautilus.txt.gpg from the docker host to the ubuntu_
 
 ssh steve@stapp02
 
+Installed docker
+
+```bash
+sudo yum install -y docker
+sudo systemctl enable docker
+sudo systemctl start docker
+```
+
 Verified the container is running
 
 ```bash
