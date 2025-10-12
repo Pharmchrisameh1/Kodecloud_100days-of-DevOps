@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-devops
+  labels:
+    app: web-devops
+spec:
+  containers:
+    - name: container-devops
+      image: httpd:latest
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: devops-storage
+          mountPath: /usr/local/apache2/htdocs
+  volumes:
+    - name: devops-storage
+      persistentVolumeClaim:
+        claimName: pvc-devops
+
