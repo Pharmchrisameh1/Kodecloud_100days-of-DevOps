@@ -44,12 +44,13 @@ Edited the deployment to correct the image name:
 ```
 kubectl edit deployment python-deployment-devops
 ```
+```
 containers:
 - name: python-container-devops
   image: poroko/flask-demo-app:latest
   ports:
     - containerPort: 5000
-
+```
 
 Verified the pod status:
 
