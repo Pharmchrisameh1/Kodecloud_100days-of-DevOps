@@ -34,10 +34,10 @@ kubectl get svc python-service-devops
 ```
 Output:
 
-
+```
 NAME                    TYPE       CLUSTER-IP     PORT(S)          AGE
 python-service-devops   NodePort   10.96.5.7      8080:32345/TCP   20m
-
+```
 
 Edited the deployment to correct the image name:
 
